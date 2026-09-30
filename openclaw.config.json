@@ -1,0 +1,71 @@
+{
+  "name": "hindsight-enterprise-openclaw-agent",
+  "version": "1.0.0",
+  "description": "OpenClaw Autonomous Agent with Hindsight Persistent Biomimetic Memory",
+  "plugins": [
+    {
+      "name": "@vectorize-io/hindsight-openclaw",
+      "config": {
+        "mode": "cloud",
+        "apiUrl": "https://api.hindsight.vectorize.io",
+        "autoRetain": true,
+        "autoRecall": true,
+        "domains": ["sales", "devops", "support", "feedback"]
+      }
+    }
+  ],
+  "llm": {
+    "provider": "groq",
+    "model": "llama-3.3-70b-versatile",
+    "fallbackModels": [
+      "openai/gpt-oss-120b",
+      "qwen/qwen3-32b"
+    ],
+    "temperature": 0.3,
+    "maxTokens": 1024,
+    "retryOnToolError": true
+  },
+  "memory": {
+    "system": "hindsight",
+    "retentionPolicy": "permanent",
+    "syncIntervalMs": 5000
+  },
+  "tools": [
+    {
+      "name": "hindsight_retain",
+      "description": "Retain a new fact, experience, or mental model into long-term memory",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "domain": { "type": "string", "enum": ["sales", "devops", "support", "feedback"] },
+          "type": { "type": "string", "enum": ["fact", "experience", "mental_model"] },
+          "content": { "type": "string" }
+        },
+        "required": ["domain", "type", "content"]
+      }
+    },
+    {
+      "name": "hindsight_recall",
+      "description": "Recall past facts, experiences, and learned strategies by semantic query",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "query": { "type": "string" },
+          "domain": { "type": "string" }
+        },
+        "required": ["query"]
+      }
+    },
+    {
+      "name": "hindsight_reflect",
+      "description": "Synthesize accumulated experiences into high-level mental models",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "domain": { "type": "string" }
+        },
+        "required": ["domain"]
+      }
+    }
+  ]
+}
